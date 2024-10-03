@@ -19,9 +19,9 @@ patches:
         path: /spec/storageClassName
         value: ocs-storagecluster-ceph-rbd-virtualization
   - target:
-        kind: PersistentVolumeClaim
-        name: additional-disk
-      patch: |-
-        - op: replace
-          path: /spec/storageClassName
-          value: ocs-storagecluster-ceph-rbd-virtualization
+      kind: PersistentVolumeClaim
+      name: additional-disk
+    patch: |-
+      - op: replace
+        path: /spec/storageClassName
+        value: ocs-storagecluster-ceph-rbd-virtualization
