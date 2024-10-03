@@ -3,7 +3,6 @@
 resources:
   - ../base
 patches:
-  Use masquerade network interface.
   - target:
       kind: VirtualMachine
       name: centos-stream
