@@ -30,6 +30,9 @@ spec:
             - name: additional-disk
               disk:
                 bus: virtio
+          interfaces:
+            - name: default
+              model: virtio
         resources:
           requests:
             memory: 4Gi

@@ -3,14 +3,14 @@
 resources:
   - ../base
 patches:
-  # Use masquerade network interface.
-  # - target:
-  #     kind: VirtualMachine
-  #     name: centos-stream
-  #   patch: |-
-  #     - op: add
-  #       path: /spec/template/spec/domain/devices/interfaces/0/masquerade
-  #       value: {}
+  Use masquerade network interface.
+  - target:
+      kind: VirtualMachine
+      name: centos-stream
+    patch: |-
+      - op: add
+        path: /spec/template/spec/domain/devices/interfaces/0/masquerade
+        value: {}
   # Use internal ceph cluster.
   - target:
       kind: PersistentVolumeClaim
@@ -19,3 +19,10 @@ patches:
       - op: replace
         path: /spec/storageClassName
         value: ocs-storagecluster-ceph-rbd-virtualization
+  - target:
+        kind: PersistentVolumeClaim
+        name: additional-disk
+      patch: |-
+        - op: replace
+          path: /spec/storageClassName
+          value: ocs-storagecluster-ceph-rbd-virtualization
