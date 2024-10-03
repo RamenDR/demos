@@ -1,0 +1,16 @@
+---
+resources:
+  - source.yaml
+  - pvc.yaml
+  - pvc-additional-disk.yaml
+  - vm.yaml
+  - service.yaml
+labels:
+  - pairs:
+      appname: vm
+secretGenerator:
+  - name: centos-stream
+    files:
+      - test_rsa.pub
+generatorOptions:
+  disableNameSuffixHash: true

@@ -1,0 +1,56 @@
+# PVC based CentOS Stream VM with an additional disk.
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: centos-stream
+spec:
+  running: true
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: small
+        vm.kubevirt.io/os: centos-stream
+        vm.kubevirt.io/workload: server
+      labels:
+        kubevirt.io/size: small
+        kubevirt.io/domain: centos-stream
+    spec:
+      domain:
+        cpu:
+          cores: 2
+        devices:
+          disks:
+            - name: centos-stream
+              disk:
+                bus: virtio
+            - name: cloud-init
+              disk:
+                bus: virtio
+            - name: additional-disk
+              disk:
+                bus: virtio
+        resources:
+          requests:
+            memory: 4Gi
+      networks:
+        - name: default
+          pod: {}
+      volumes:
+        - name: centos-stream
+          persistentVolumeClaim:
+            claimName: centos-stream
+        - name: cloud-init
+          cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              password: centos
+              chpasswd:
+                expire: false
+              ssh_pwauth: true
+              bootcmd:
+                - "sudo mkdir -p /mnt/config"
+                - "sudo mount /dev/disk/by-id/virtio-config-disk /mnt/config"
+        - name: additional-disk
+          persistentVolumeClaim:
+            claimName: additional-disk
