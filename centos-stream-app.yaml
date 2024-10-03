@@ -1,0 +1,53 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: centos-stream
+  namespace: centos-stream-vm
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values: 
+          - centos-stream
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  annotations:
+    apps.open-cluster-management.io/git-branch: wine
+    apps.open-cluster-management.io/git-path: centos-stream/odr-regional
+    apps.open-cluster-management.io/reconcile-option: merge
+  labels:
+    app: centos-stream
+  name: centos-stream-subscription-1
+  namespace: centos-stream-vm
+spec:
+  channel: ggithubcom-latouchek-odf-dr-demos-ns/ggithubcom-latouchek-odf-dr-demos
+  placement:
+    placementRef:
+      kind: Placement
+      name: centos-stream-placement-1
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  labels:
+    app: centos-stream
+  name: centos-stream-placement-1
+  namespace: centos-stream-vm
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: 'name'
+              operator: 'In'
+              values: 
+                - 'cluster1'
+  clusterSets:
+    - clusterset-dr
